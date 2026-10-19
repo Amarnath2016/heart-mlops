@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push: {branches: [main]}
+  pull_request:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements.txt
+      - name: Lint (fails the build on errors)
+        run: flake8 src tests scripts
+      - name: Unit tests
+        run: pytest -v --junitxml=test-results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: test-results, path: test-results.xml}
+
+  train:
+    needs: lint-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements.txt
+      - name: Download and clean data
+        run: python scripts/download_data.py
+      - name: EDA figures
+        run: python -m src.eda
+      - name: Train models (tracked with MLflow)
+        run: python -m src.train
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model-and-tracking
+          path: |
+            models/
+            mlruns/
+            reports/
+            data/processed/
+
+  docker:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: model-and-tracking}
+      - name: Build image
+        run: docker build -t heart-api:ci .
+      - name: Smoke test container
+        run: |
+          docker run -d --name api -p 8000:8000 heart-api:ci
+          for i in $(seq 1 20); do curl -sf localhost:8000/health && break || sleep 2; done
+          curl -sf -X POST localhost:8000/predict -H 'Content-Type: application/json' \
+            -d '{"age":63,"sex":1,"cp":4,"trestbps":145,"chol":233,"fbs":1,"restecg":2,"thalach":150,"exang":0,"oldpeak":2.3,"slope":3,"ca":0,"thal":6}' | tee prediction.json
+          docker logs api > container.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: docker-smoke-test, path: "prediction.json\ncontainer.log"}

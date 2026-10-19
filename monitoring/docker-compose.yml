@@ -1,0 +1,19 @@
+# Local stack: API + Prometheus (9090) + Grafana (3000, admin/admin)
+# Run from repo root after training:  docker compose -f monitoring/docker-compose.yml up --build
+services:
+  api:
+    build: {context: .., dockerfile: Dockerfile}
+    ports: ["8000:8000"]
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes: ["./prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+    ports: ["9090:9090"]
+    depends_on: [api]
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports: ["3000:3000"]
+    volumes:
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./grafana/heart-api-dashboard.json:/var/lib/grafana/dashboards/heart-api-dashboard.json:ro
+    depends_on: [prometheus]

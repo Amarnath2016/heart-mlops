@@ -1,0 +1,7 @@
+# Minimal runtime for the serving container (versions must match training)
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.5.2
+joblib==1.4.2
+flask==3.0.3
+gunicorn==22.0.0

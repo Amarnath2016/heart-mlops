@@ -1,0 +1,8 @@
+.git
+mlruns
+data/raw
+reports
+screenshots
+__pycache__
+*.pyc
+tests
