@@ -37,8 +37,8 @@
     "ca",
     "thal"
   ],
-  "mlflow_run_id": "8d3f024d90894143aff79a1f838e448b",
-  "trained_at": "2026-10-20T10:22:27.628958+00:00",
+  "mlflow_run_id": "4b7ffcdb4be648fa913b797012c15ea3",
+  "trained_at": "2026-10-20T13:18:42.836999+00:00",
   "comparison": {
     "logistic_regression": {
       "cv_roc_auc_mean": 0.9024931590148981,
