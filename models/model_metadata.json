@@ -1,0 +1,58 @@
+{
+  "model_name": "logistic_regression",
+  "best_params": {
+    "clf__C": "1.0"
+  },
+  "cv_metrics": {
+    "cv_accuracy_mean": 0.8471088435374149,
+    "cv_precision_mean": 0.8767529146045769,
+    "cv_recall_mean": 0.783399209486166,
+    "cv_f1_mean": 0.8245007436109558,
+    "cv_roc_auc_mean": 0.9024931590148981,
+    "cv_accuracy_std": 0.009976921631744011,
+    "cv_precision_std": 0.054190324098361047,
+    "cv_recall_std": 0.045917899546111016,
+    "cv_f1_std": 0.006866722884370779,
+    "cv_roc_auc_std": 0.01443995119614911
+  },
+  "test_metrics": {
+    "test_accuracy": 0.8852459016393442,
+    "test_precision": 0.8387096774193549,
+    "test_recall": 0.9285714285714286,
+    "test_f1": 0.8813559322033898,
+    "test_roc_auc": 0.9664502164502166
+  },
+  "features": [
+    "age",
+    "trestbps",
+    "chol",
+    "thalach",
+    "oldpeak",
+    "sex",
+    "cp",
+    "fbs",
+    "restecg",
+    "exang",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "mlflow_run_id": "8d3f024d90894143aff79a1f838e448b",
+  "trained_at": "2026-10-20T10:22:27.628958+00:00",
+  "comparison": {
+    "logistic_regression": {
+      "cv_roc_auc_mean": 0.9024931590148981,
+      "test_roc_auc": 0.9664502164502166,
+      "test_accuracy": 0.8852459016393442,
+      "test_precision": 0.8387096774193549,
+      "test_recall": 0.9285714285714286
+    },
+    "random_forest": {
+      "cv_roc_auc_mean": 0.9022578066056326,
+      "test_roc_auc": 0.948051948051948,
+      "test_accuracy": 0.8524590163934426,
+      "test_precision": 0.8064516129032258,
+      "test_recall": 0.8928571428571429
+    }
+  }
+}
